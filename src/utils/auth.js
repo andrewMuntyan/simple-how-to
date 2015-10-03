@@ -1,14 +1,16 @@
 let Auth = {
   login(name, cb) {
-    cb = arguments[arguments.length - 1];
-    if (localStorage.token) {
+    if (this.getName()) {
       if (cb) cb(true);
       this.onChange(true, name);
       return
     }
     pretendRequest(name, (res) => {
       if (res.authenticated) {
-        localStorage.token = res.token;
+        localStorage.token = JSON.stringify({
+          name: name,
+          token: res.token
+        });
         if (cb) cb(true);
         this.onChange(true, res.name)
       } else {
@@ -20,6 +22,15 @@ let Auth = {
 
   getToken() {
     return localStorage.token
+  },
+
+  //TODO: fix this
+  getName() {
+    let token = this.getToken();
+    if (token) {
+      return JSON.parse(token).name;
+    }
+    return false;
   },
 
   logout(cb) {
@@ -38,8 +49,8 @@ let Auth = {
 function pretendRequest(name, cb) {
   setTimeout(() => {
     cb({
-      name: name || prompt('You should set username', 'user'),
-      authenticated: true,
+      name: name,
+      authenticated: name && name.length && typeof name === 'string',
       token: Math.random().toString(36).substring(7)
     })
   }, 0)

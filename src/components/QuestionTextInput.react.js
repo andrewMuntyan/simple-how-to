@@ -40,10 +40,14 @@ var QuestionTextInput = React.createClass({
    * used in different ways.
    */
   _save: function() {
-    this.props.onSave(this.state.value);
-    this.setState({
-      value: ''
-    });
+    let value = this.state.value;
+    if (value && value.length && typeof value === 'string') {
+      this.props.onSave(this.state.value);
+      this.setState({
+        value: ''
+      });
+    }
+
   },
 
   /**

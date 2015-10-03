@@ -1,6 +1,6 @@
 import keyMirror from 'keymirror';
 
-module.exports = keyMirror({
+export default keyMirror({
   QUESTION_CREATE: null,
   QUESTION_EDIT: null,
   QUESTION_ADD_ANSWER: null,

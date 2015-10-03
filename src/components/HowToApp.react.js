@@ -6,14 +6,13 @@ import Auth from './../utils/auth';
 var HowToApp = React.createClass({
 
   componentWillMount() {
-    Auth.onChange = this.updateAuth;
+    //Auth.onChange = this.updateAuth;
 
   },
 
-  checkAuth() {
-    console.log('checkauth');
-    if (!Auth.loggedIn()) Auth.login()
-  },
+  //checkAuth() {
+  //  if (!Auth.loggedIn()) Auth.login()
+  //},
 
   updateAuth(loggedIn, name) {
     console.log('logged in ' + loggedIn + ' ' + name);
@@ -26,7 +25,7 @@ var HowToApp = React.createClass({
    * @return {object}
    */
   render() {
-    this.checkAuth();
+    //this.checkAuth();
     return (
       <div>
         <h1>HowTo</h1>

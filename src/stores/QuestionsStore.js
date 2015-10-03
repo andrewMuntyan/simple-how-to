@@ -96,7 +96,6 @@ function syncCollection () {
   localStorage.setItem('_questions', JSON.stringify(_questions));
 }
 
-
 var QuestionStore = assign({}, EventEmitter.prototype, {
 
   /**

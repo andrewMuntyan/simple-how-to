@@ -1,6 +1,6 @@
 /*
  *
- * TodoActions
+ * QuestionActions
  */
 import AppDispatcher from  '../dispatcher/AppDispatcher';
 import QuestionConstants from '../constants/QuestionConstants';
