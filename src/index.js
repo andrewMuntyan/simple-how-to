@@ -2,7 +2,8 @@ import React from 'react';
 import HowToApp from './components/HowToApp.react.js';
 import QuestionsList from './components/QuestionsList.react.js';
 import QuestionView from './components/QuestionView.react.js';
-import { Router, Route, IndexRoute, Redirect} from 'react-router'
+import { Router, Route, IndexRoute, Redirect} from 'react-router';
+
 
 
 // Declarative route configuration (could also load this config lazily
