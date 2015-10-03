@@ -7,11 +7,16 @@ var HowToApp = React.createClass({
 
   componentWillMount() {
     Auth.onChange = this.updateAuth;
-    Auth.login()
+
+  },
+
+  checkAuth() {
+    console.log('checkauth');
+    if (!Auth.loggedIn()) Auth.login()
   },
 
   updateAuth(loggedIn, name) {
-    alert('logged in ' + loggedIn + ' ' + name);
+    console.log('logged in ' + loggedIn + ' ' + name);
     //this.setState({
     //  loggedIn: loggedIn
     //})
@@ -21,6 +26,7 @@ var HowToApp = React.createClass({
    * @return {object}
    */
   render() {
+    this.checkAuth();
     return (
       <div>
         <h1>HowTo</h1>
