@@ -10,9 +10,10 @@ import QuestionConstants from '../constants/QuestionConstants';
 import UserStore from './UserStore';
 
 
-var CHANGE_EVENT = 'change';
-var existingQuestions = localStorage.getItem('_questions');
-var _questions = existingQuestions ? JSON.parse(existingQuestions) : {};
+let CHANGE_EVENT = 'change',
+  existingQuestions = localStorage.getItem('_questions'),
+  _questions = existingQuestions ? JSON.parse(existingQuestions) : {},
+  _displayedQuestions = _questions;
 
 
 /**
@@ -96,6 +97,43 @@ function checkChosenAnswer (answers) {
 }
 
 /**
+ * set to _displayedQuestions array with only requested type question
+ * @param  {string} type
+ */
+function filterQuestions (type) {
+  switch(type) {
+    case 'unanswered':
+      _displayedQuestions = objectFilter(_questions, (question) => {
+        return !question.hasChosenAnswer
+      });
+
+      break;
+
+    case 'answered':
+      _displayedQuestions = objectFilter(_questions, (question) => {
+        return question.hasChosenAnswer
+      });
+
+      break;
+
+    default:
+      _displayedQuestions = objectFilter(_questions,() => {return true})
+  }
+}
+
+//TODO: don't be lazy. use Underscore or lodash next time
+function objectFilter (obj, predicate) {
+  let result = {}, key;
+  for (key in obj) {
+    if (obj.hasOwnProperty(key) && predicate(obj[key])) {
+      result[key] = obj[key];
+    }
+  }
+
+  return result;
+}
+
+/**
  * Save current questions collection to localStorage.
  */
 function syncCollection () {
@@ -108,7 +146,7 @@ var QuestionStore = assign({}, EventEmitter.prototype, {
    * Get Questions that have correct answer.
    * @return {object}
    */
-  getWithAnswer() {
+  getAnswered() {
     //TODO: finish this method
     //for (var id in _questions) {
     //  if (!_questions[id].hasChosenAnswer) {
@@ -122,7 +160,7 @@ var QuestionStore = assign({}, EventEmitter.prototype, {
    * Get Questions that does not have correct answer.
    * @return {object}
    */
-  getWithoutAnswer() {
+  getUnanswered() {
     //TODO: finish this method
     //for (var id in _questions) {
     //  if (!_questions[id].hasChosenAnswer) {
@@ -137,7 +175,7 @@ var QuestionStore = assign({}, EventEmitter.prototype, {
    * @return {object}
    */
   getAll() {
-    return _questions;
+    return _displayedQuestions;
   },
 
   /**
@@ -207,6 +245,11 @@ AppDispatcher.register(function(action) {
 
     case QuestionConstants.QUESTION_SET_CHOSEN_ANSWER:
       setChosenAnswer(action.questionId, action.answerId);
+      QuestionStore.emitChange();
+      break;
+
+    case QuestionConstants.QUESTION_LIST_FILTER:
+      filterQuestions(action.type);
       QuestionStore.emitChange();
       break;
 

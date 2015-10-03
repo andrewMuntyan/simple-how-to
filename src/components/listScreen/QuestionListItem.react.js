@@ -1,3 +1,4 @@
+import './../__styles/q-list-item.scss';
 import React, {PropTypes} from 'react';
 import QuestionActions from '../../actions/QuestionActions';
 import QuestionTextInput from './../common/TextInput.react.js';
@@ -39,7 +40,8 @@ let QuestionItem = React.createClass({
       <li
         className={classNames({
           'completed': question.hasChosenAnswer,
-          'editing': this.state.isEditing
+          'editing': this.state.isEditing,
+          'q-list-item': true
         })}
         key={question.id}>
         <div className="view">

@@ -1,52 +1,62 @@
-import './../styles/common/common.scss';
+import './../__styles/q-list-screen.scss';
 import React from 'react';
 import QuestionsStore from './../../stores/QuestionsStore';
-import Header from './Header.react';
-import MainSection from './MainSection.react';
+import Header from './QuestionForm.react.js';
+import QuestionItem from './QuestionListItem.react.js';
 
 
 function getQuestions() {
   return {
-    allQuestions: QuestionsStore.getAll(),
-    hasAnswer: QuestionsStore.getWithAnswer(),
-    doesNotHaveAnswer: QuestionsStore.getWithoutAnswer()
+    questions: QuestionsStore.getAll()
   };
 }
 
 
 var QuestionsList = React.createClass({
-  getInitialState: function() {
+  getInitialState() {
     return getQuestions();
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     QuestionsStore.addChangeListener(this._onChange);
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     QuestionsStore.removeChangeListener(this._onChange);
   },
 
   /**
    * @return {object}
    */
-  render: function() {
+  render() {
     return (
-      <div>
+      <div className='q-list'>
         <Header />
-        <MainSection
-          allQuestions = {this.state.allQuestions}
-        />
+        {this.renderList()}
 
       </div>
 
+    );
+  },
+  
+  renderList() {
+    let questions = [];
+    let allQuestions = this.state.questions;
+    for (var key in this.state.questions) {
+      questions.push(<QuestionItem key={key} question={allQuestions[key]} />);
+    }
+
+    return (
+      <section id="main">
+        <ul id="questions-list">{questions}</ul>
+      </section>
     );
   },
 
   /**
    * Event handler for 'change' events coming from the QuestionsStore
    */
-  _onChange: function() {
+  _onChange() {
     this.setState(getQuestions());
   }
 

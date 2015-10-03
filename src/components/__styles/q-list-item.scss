@@ -1,0 +1,7 @@
+.q-list-item {
+  margin: 5px 0;
+
+  &.completed {
+    border: 1px solid red;
+  }
+}

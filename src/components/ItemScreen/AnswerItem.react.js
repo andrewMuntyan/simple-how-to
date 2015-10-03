@@ -25,11 +25,20 @@ let AnswerItem = React.createClass({
         >
         <div className="answer-view">
           {answer.text} by {answer.author}
-          <button onClick={this.setChosenState}>
-            {answer.isChosen ? 'I changed my mind' : 'This one is correct'}
-          </button>
+          {this.props.showChoseBtn ? this.renderChoseBtn(answer) : null}
         </div>
       </li>
+    );
+  },
+
+  /**
+   * @return {object}
+   */
+  renderChoseBtn(answer) {
+    return (
+      <button onClick={this.setChosenState}>
+        {answer.isChosen ? 'I changed my mind' : 'This one is correct'}
+      </button>
     );
   }
 

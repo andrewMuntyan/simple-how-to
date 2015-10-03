@@ -7,10 +7,17 @@ import QuestionConstants from '../constants/QuestionConstants';
 
 var QuestionActions = {
 
+  filterQuestions(type) {
+    AppDispatcher.dispatch({
+      actionType: QuestionConstants.QUESTION_LIST_FILTER,
+      type: type
+    });
+  },
+
   /**
    * @param  {string} text
    */
-  create: function(text) {
+  create(text) {
     AppDispatcher.dispatch({
       actionType: QuestionConstants.QUESTION_CREATE,
       text: text
@@ -21,7 +28,7 @@ var QuestionActions = {
    * @param  {string} id The ID of the Question item
    * @param  {string} text
    */
-  editQuestion: function(id, text) {
+  editQuestion(id, text) {
     AppDispatcher.dispatch({
       actionType: QuestionConstants.QUESTION_EDIT,
       id: id,
@@ -34,7 +41,7 @@ var QuestionActions = {
    * @param  {string} text Answer text
    * @param  {string} questionId
    */
-  addAnswer: function(text, questionId) {
+  addAnswer(text, questionId) {
     AppDispatcher.dispatch({
       actionType: QuestionConstants.QUESTION_ADD_ANSWER,
       text: text,
@@ -46,7 +53,7 @@ var QuestionActions = {
    * @param  {string} questionId The ID of the Question item
    * @param  {string} answerId AnswerId
    */
-  setChosenAnswer: function(questionId, answerId) {
+  setChosenAnswer(questionId, answerId) {
     AppDispatcher.dispatch({
       actionType: QuestionConstants.QUESTION_SET_CHOSEN_ANSWER,
       answerId: answerId,

@@ -1,4 +1,4 @@
-import './../styles/common/common.scss';
+import '../__styles/common/common.scss';
 import React from 'react';
 import QuestionsStore from './../../stores/QuestionsStore';
 import QuestionActions from '../../actions/QuestionActions';
@@ -6,6 +6,7 @@ import QuestionTextInput from './../common/TextInput.react.js';
 import AnswerItem from './AnswerItem.react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
+import UserStore from './../../stores/UserStore';
 
 
 let QuestionView = React.createClass({
@@ -27,8 +28,9 @@ let QuestionView = React.createClass({
 
   renderQuestionView() {
     let question = this.state.question;
+    let showChoseBtn = UserStore.getCurrentUser() === question.author;
     let answers = question.answers.map((answer) => {
-      return <AnswerItem key={answer.id} answer={answer} />;
+      return <AnswerItem key={answer.id} answer={answer} showChoseBtn={showChoseBtn}/>;
     });
     let questionClassNames = classNames({
       'completed': question.hasChosenAnswer
