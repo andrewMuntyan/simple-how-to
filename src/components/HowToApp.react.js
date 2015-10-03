@@ -6,6 +6,7 @@ import { Router, Route, Link, History } from 'react-router'
 
 
 var HowToApp = React.createClass({
+  mixins: [ History ],
 
   getInitialState() {
     return {
@@ -61,6 +62,7 @@ var HowToApp = React.createClass({
 
   logout() {
     UserActions.logout(() => {
+      debugger
       this.history.replaceState(null, '/')
     })
   },

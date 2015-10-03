@@ -23,9 +23,10 @@ var UserActions = {
   /**
    *
    */
-  logout: function() {
+  logout: function(cb) {
     AppDispatcher.dispatch({
-      actionType: UserConstants.LOGOUT
+      actionType: UserConstants.LOGOUT,
+      cb: cb
     });
   }
 };

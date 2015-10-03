@@ -58,7 +58,7 @@ AppDispatcher.register(function(action) {
       break;
 
     case UserConstants.LOGOUT:
-      Auth.logout();
+      Auth.logout(action.cb);
       UserStore.emitChange();
       break;
 
