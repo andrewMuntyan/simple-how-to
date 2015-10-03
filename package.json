@@ -40,6 +40,6 @@
     "keymirror": "~0.1.0",
     "object-assign": "^1.0.0",
     "react": "^0.13.0",
-    "director": "latest"
+    "react-router": "latest"
   }
 }

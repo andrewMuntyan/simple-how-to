@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import QuestionActions from '../actions/QuestionActions';
 import QuestionTextInput from './QuestionTextInput.react';
-import QuestionItem from './QuestionItem.react';
+import QuestionItem from './QuestionListItem.react.js';
 
 let MainSection = React.createClass({
 
