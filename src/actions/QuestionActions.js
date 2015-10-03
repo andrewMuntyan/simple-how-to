@@ -30,14 +30,13 @@ var QuestionActions = {
   },
 
   /**
-   * @param  {string} userName The ID of the Question item
+   *
    * @param  {string} text Answer text
    * @param  {string} questionId
    */
-  addAnswer: function(userName, text, questionId) {
+  addAnswer: function(text, questionId) {
     AppDispatcher.dispatch({
       actionType: QuestionConstants.QUESTION_ADD_ANSWER,
-      userName: userName,
       text: text,
       questionId: questionId
     });

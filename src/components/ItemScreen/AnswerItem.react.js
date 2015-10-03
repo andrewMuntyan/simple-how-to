@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import classNames from 'classnames';
-import QuestionActions from '../actions/QuestionActions';
+import QuestionActions from '../../actions/QuestionActions';
 
 let AnswerItem = React.createClass({
 

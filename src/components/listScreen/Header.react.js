@@ -1,6 +1,6 @@
 import React from 'react';
-import QuestionActions from '../actions/QuestionActions';
-import QuestionTextInput from './QuestionTextInput.react';
+import QuestionActions from '../../actions/QuestionActions';
+import QuestionTextInput from './../common/TextInput.react.js';
 
 var Header = React.createClass({
 

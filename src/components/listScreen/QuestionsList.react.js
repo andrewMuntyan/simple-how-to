@@ -1,6 +1,6 @@
-import './styles/common/common.scss';
+import './../styles/common/common.scss';
 import React from 'react';
-import QuestionsStore from './../stores/QuestionsStore';
+import QuestionsStore from './../../stores/QuestionsStore';
 import Header from './Header.react';
 import MainSection from './MainSection.react';
 
@@ -47,12 +47,6 @@ var QuestionsList = React.createClass({
    * Event handler for 'change' events coming from the QuestionsStore
    */
   _onChange: function() {
-    console.log('---');
-    console.log('getQuestions');
-    console.log(getQuestions());
-    console.log('---');
-    console.log();
-
     this.setState(getQuestions());
   }
 

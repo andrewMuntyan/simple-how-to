@@ -5,8 +5,10 @@
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import {EventEmitter} from 'events';
-import QuestionConstants from '../constants/QuestionConstants';
 import assign from 'object-assign';
+import QuestionConstants from '../constants/QuestionConstants';
+import UserStore from './UserStore';
+
 
 var CHANGE_EVENT = 'change';
 var existingQuestions = localStorage.getItem('_questions');
@@ -22,22 +24,24 @@ function getId() {
   return (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
 }
 
-
 /**
  * Create a Question item.
  * @param  {string} text The content of the Question
  * @param  {string} author Question Author
  */
-function create(text, author) {
-  let id = getId();
-  _questions[id] = {
-    id: id,
-    hasChosenAnswer: false,
-    text: text,
-    author: author,
-    answers: []
-  };
-  syncCollection();
+function create(text) {
+  if(UserStore.hasPermissions()){
+    let id = getId();
+    _questions[id] = {
+      id: id,
+      hasChosenAnswer: false,
+      text: text,
+      author: UserStore.getCurrentUser(),
+      answers: []
+    };
+    syncCollection();
+  }
+
 }
 
 /**
@@ -57,6 +61,7 @@ function update (id, updates) {
  *
  */
 function addAnswer (params) {
+  console.log(params)
   _questions[params.questionId]['answers'].push({
     id: getId(),
     questionId: params.questionId,
@@ -185,11 +190,14 @@ AppDispatcher.register(function(action) {
       break;
 
     case QuestionConstants.QUESTION_ADD_ANSWER:
-      addAnswer({
-        questionId: action.questionId,
-        text: action.text.trim(),
-        userName: action.userName
-      });
+      if(UserStore.hasPermissions()){
+        addAnswer({
+          questionId: action.questionId,
+          text: action.text.trim(),
+          userName: UserStore.getCurrentUser()
+        });
+      }
+
       QuestionStore.emitChange();
       break;
 

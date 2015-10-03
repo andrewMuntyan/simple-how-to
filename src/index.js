@@ -1,9 +1,9 @@
 import React from 'react';
 import UserStore from './stores/UserStore';
 import HowToApp from './components/HowToApp.react';
-import QuestionsList from './components/QuestionsList.react';
-import QuestionView from './components/QuestionView.react';
-import Login from './components/Login.react.js';
+import QuestionsList from './components/listScreen/QuestionsList.react.js';
+import QuestionView from './components/ItemScreen/QuestionView.react.js';
+import Login from './components/common/Login.react.js';
 import { Router, Route, IndexRoute, Redirect} from 'react-router';
 
 React.render((
@@ -21,8 +21,8 @@ React.render((
 function requireAuth(nextState, replaceState) {
   //debugger
 
-  let hasPermissions = UserStore.checkPermissions();
-  if (!hasPermissions.userName && nextState.location.pathname !== '/login') {
+  let hasPermissions = UserStore.hasPermissions();
+  if (!hasPermissions && nextState.location.pathname !== '/login') {
     replaceState({ nextPathname: nextState.location.pathname }, '/login')
   }
 }

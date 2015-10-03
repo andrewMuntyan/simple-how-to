@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
-import QuestionActions from '../actions/QuestionActions';
-import QuestionTextInput from './QuestionTextInput.react';
+import QuestionActions from '../../actions/QuestionActions';
+import QuestionTextInput from './../common/TextInput.react.js';
 import { Router, Route, Link, IndexRoute } from 'react-router'
 import classNames from 'classnames';
 
@@ -42,9 +42,9 @@ let QuestionItem = React.createClass({
         })}
         key={question.id}>
         <div className="view">
-          <Link to={`/question/${question.id}`} title={question.text}>{question.text}</Link>
+          <Link to={`/question/${question.id}`}>{question.text} by {question.author}</Link>
           <label onDoubleClick={this._onDoubleClick}>
-            {question.text}
+            {question.text} by {question.author}
           </label>
         </div>
         {input}

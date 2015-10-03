@@ -1,8 +1,8 @@
-import './styles/common/common.scss';
+import './../styles/common/common.scss';
 import React from 'react';
-import QuestionsStore from './../stores/QuestionsStore';
-import QuestionActions from '../actions/QuestionActions';
-import QuestionTextInput from './QuestionTextInput.react';
+import QuestionsStore from './../../stores/QuestionsStore';
+import QuestionActions from '../../actions/QuestionActions';
+import QuestionTextInput from './../common/TextInput.react.js';
 import AnswerItem from './AnswerItem.react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
@@ -75,8 +75,7 @@ let QuestionView = React.createClass({
 
   _onAnswer(text) {
     if (text.trim()) {
-      //TODO: implement getting userName
-      QuestionActions.addAnswer('user', text, this.state.questionId);
+      QuestionActions.addAnswer(text, this.state.questionId);
     }
   },
 

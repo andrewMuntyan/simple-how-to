@@ -11,7 +11,7 @@ import assign from 'object-assign';
 let CHANGE_EVENT = 'change';
 let existingQuestions = localStorage.getItem('_questions');
 
-let _userName = '';
+let _userName = Auth.getName();
 
 const UserStore = assign({}, EventEmitter.prototype, {
 
@@ -19,10 +19,8 @@ const UserStore = assign({}, EventEmitter.prototype, {
    * Check user authorization status.
    * @return {object}
    */
-  checkPermissions() {
-    return {
-      userName: Auth.getName()
-    }
+  hasPermissions() {
+    return !!(Auth.getName()).length
   },
 
   /**

@@ -1,8 +1,8 @@
 import React from 'react';
-import UserStore from './../stores/UserStore';
-import UserActions from '../actions/UserActions';
-import QuestionTextInput from './QuestionTextInput.react';
-import Auth from './../utils/auth';
+import UserStore from './../../stores/UserStore';
+import UserActions from '../../actions/UserActions';
+import QuestionTextInput from './TextInput.react.js';
+import Auth from './../../utils/auth';
 import { Router, Route, Link, History } from 'react-router'
 
 //import classNames from 'classnames';
