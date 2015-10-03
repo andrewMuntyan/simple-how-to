@@ -44,12 +44,16 @@ let LoginView = React.createClass({
    */
   _onLogin(userName) {
     UserActions.login(userName, (loggedIn) => {
-      var { location } = this.props;
+      if (loggedIn) {
+        var { location } = this.props;
 
-      if (location.state && location.state.nextPathname) {
-        this.history.replaceState(null, location.state.nextPathname)
+        if (location.state && location.state.nextPathname) {
+          this.history.pushState(null, location.state.nextPathname)
+        } else {
+          this.history.pushState(null, '/')
+        }
       } else {
-        this.history.replaceState(null, '/')
+        console.error('User name is invalid')
       }
     })
   }

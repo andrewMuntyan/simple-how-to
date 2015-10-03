@@ -11,8 +11,6 @@ import assign from 'object-assign';
 let CHANGE_EVENT = 'change';
 let existingQuestions = localStorage.getItem('_questions');
 
-let _userName = Auth.getName();
-
 const UserStore = assign({}, EventEmitter.prototype, {
 
   /**
@@ -28,7 +26,7 @@ const UserStore = assign({}, EventEmitter.prototype, {
    * @return {string}
    */
   getCurrentUser() {
-    return _userName
+    return Auth.getName()
   },
 
   emitChange() {
@@ -55,12 +53,13 @@ AppDispatcher.register(function(action) {
 
   switch(action.actionType) {
     case UserConstants.LOGIN:
-      _userName = action.userName;
       Auth.login(action.userName, action.loginCb);
+      UserStore.emitChange();
       break;
 
     case UserConstants.LOGOUT:
       Auth.logout();
+      UserStore.emitChange();
       break;
 
     default:

@@ -24,7 +24,7 @@ let Auth = {
     return localStorage.token
   },
 
-  //TODO: fix this
+  //TODO: improve this
   getName() {
     let token = this.getToken();
     if (token) {
@@ -47,13 +47,11 @@ let Auth = {
 };
 
 function pretendRequest(name, cb) {
-  setTimeout(() => {
-    cb({
-      name: name,
-      authenticated: name && name.length && typeof name === 'string',
-      token: Math.random().toString(36).substring(7)
-    })
-  }, 0)
+  cb({
+    name: name,
+    authenticated: name && name.length && typeof name === 'string',
+    token: Math.random().toString(36).substring(7)
+  })
 }
 
 export default Auth;

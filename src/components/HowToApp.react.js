@@ -1,16 +1,25 @@
 import './__styles/common/common.scss';
 import React from 'react';
-import { Link } from 'react-router';
 import UserStore from './../stores/UserStore';
-import QuestionActions from './../actions/QuestionActions';
+import UserActions from '../actions/UserActions';
+import { Router, Route, Link, History } from 'react-router'
 
 
 var HowToApp = React.createClass({
 
-  componentWillMount() {
-
+  getInitialState() {
+    return {
+      user: UserStore.getCurrentUser()
+    }
   },
 
+  componentDidMount() {
+    UserStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount() {
+    UserStore.removeChangeListener(this._onChange);
+  },
 
   /**
    * @return {object}
@@ -19,20 +28,45 @@ var HowToApp = React.createClass({
     return (
       <div>
         <Link to='/'><h1>HowTo logo</h1></Link>
-        <h2>{UserStore.getCurrentUser()}</h2>
-        <Link to='/login'>Logout</Link>
-        <div className="filter">
-          <button onClick={this.filter.bind(null, 'unanswered')}>Unanswered</button>
-          <button onClick={this.filter.bind(null, 'answered')}>Answered</button>
-          <button onClick={this.filter.bind(null, 'all')}>All</button>
-        </div>
+        <h2>
+          {this.state.user ? this.renderLogged() : this.renderUnlogged()}
+        </h2>
+
         {this.props.children}
       </div>
     )
   },
 
-  filter(type) {
-    QuestionActions.filterQuestions(type);
+  renderLogged() {
+    return(
+      <div>
+        <h2>{this.state.user}</h2>
+        <button onClick={this.logout}>Log out</button>
+      </div>
+    );
+  },
+
+  renderUnlogged() {
+    if (this.props.location.pathname !== '/login') {
+      return(
+        <div>
+          <h2>You should be logged in</h2>
+          <Link to='/login'>Login</Link>
+        </div>
+      )
+    }
+
+    return null;
+  },
+
+  logout() {
+    UserActions.logout(() => {
+      this.history.replaceState(null, '/')
+    })
+  },
+
+  _onChange() {
+    this.setState({user: UserStore.getCurrentUser()})
   }
 
 });

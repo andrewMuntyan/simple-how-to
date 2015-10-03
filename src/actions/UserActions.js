@@ -10,7 +10,7 @@ var UserActions = {
   /**
    *
    * @param  {string} userName
-   * @param  {object} location object with information about location from RR
+   * @param  {function} loginCb callback function will be invoked after login
    */
   login: function(userName, loginCb) {
     AppDispatcher.dispatch({
@@ -21,12 +21,11 @@ var UserActions = {
   },
 
   /**
-   * @param  {string} userName
+   *
    */
-  logout: function(userName) {
+  logout: function() {
     AppDispatcher.dispatch({
-      actionType: UserConstants.LOGOUT,
-      userName: userName
+      actionType: UserConstants.LOGOUT
     });
   }
 };
