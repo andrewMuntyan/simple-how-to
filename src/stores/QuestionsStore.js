@@ -9,12 +9,13 @@ import QuestionConstants from '../constants/QuestionConstants';
 import assign from 'object-assign';
 
 var CHANGE_EVENT = 'change';
-
-var _questions = {};
+var existingQuestions = localStorage.getItem('_questions');
+var _questions = existingQuestions ? JSON.parse(existingQuestions) : {};
 
 /**
  * Create a Question item.
  * @param  {string} text The content of the Question
+ * @param  {string} author Question Author
  */
 function create(text, author) {
 
@@ -26,13 +27,7 @@ function create(text, author) {
     text: text,
     author: author
   };
-  console.log('QuestionsStore create');
-  console.log('---');
-  console.log('_questions');
-  console.log(_questions);
-  console.log('---');
-  console.log();
-
+  syncCollection();
 }
 
 /**
@@ -43,13 +38,14 @@ function create(text, author) {
  */
 function update(id, updates) {
   _questions[id] = assign({}, _questions[id], updates);
-  console.log('---');
-  console.log('_questions');
-  console.log(_questions);
-  console.log('---');
-  console.log();
-
+  syncCollection();
 }
+
+function syncCollection () {
+  localStorage.setItem('_questions', JSON.stringify(_questions));
+}
+
+
 
 var QuestionStore = assign({}, EventEmitter.prototype, {
 
@@ -57,7 +53,7 @@ var QuestionStore = assign({}, EventEmitter.prototype, {
    * Get Questions that have correct answer.
    * @return {object}
    */
-  getWithAnswer: function() {
+  getWithAnswer() {
     //TODO: finish this method
     //for (var id in _questions) {
     //  if (!_questions[id].hasCorrectAnswer) {
@@ -71,7 +67,7 @@ var QuestionStore = assign({}, EventEmitter.prototype, {
    * Get Questions that does not have correct answer.
    * @return {object}
    */
-  getWithoutAnswer: function() {
+  getWithoutAnswer() {
     //TODO: finish this method
     //for (var id in _questions) {
     //  if (!_questions[id].hasCorrectAnswer) {
@@ -85,25 +81,34 @@ var QuestionStore = assign({}, EventEmitter.prototype, {
    * Get the entire collection of Questions.
    * @return {object}
    */
-  getAll: function() {
+  getAll() {
     return _questions;
   },
 
-  emitChange: function() {
+  /**
+   * Get Question by id.
+   * @param {string} id
+   * @return {object}
+   */
+  getById(id) {
+    return _questions[id];
+  },
+
+  emitChange() {
     this.emit(CHANGE_EVENT);
   },
 
   /**
    * @param {function} callback
    */
-  addChangeListener: function(callback) {
+  addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
   /**
    * @param {function} callback
    */
-  removeChangeListener: function(callback) {
+  removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   }
 });

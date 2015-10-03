@@ -1,27 +1,22 @@
 import './styles/common/common.scss';
 import React from 'react';
 import QuestionsStore from './../stores/QuestionsStore';
+import QuestionActions from '../actions/QuestionActions';
+import QuestionTextInput from './QuestionTextInput.react';
 
 
-function getQuestions() {
-  return {
-    allQuestions: QuestionsStore.getAll(),
-    hasAnswer: QuestionsStore.getWithAnswer(),
-    doesNotHaveAnswer: QuestionsStore.getWithoutAnswer()
-  };
-}
-
-
-var QuestionView = React.createClass({
-  getInitialState: function() {
-    return getQuestions();
+let QuestionView = React.createClass({
+  getInitialState() {
+    return {
+      question: QuestionsStore.getById(this.props.routeParams.id)
+    };
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     QuestionsStore.addChangeListener(this._onChange);
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     QuestionsStore.removeChangeListener(this._onChange);
   },
 
@@ -29,6 +24,8 @@ var QuestionView = React.createClass({
    * @return {object}
    */
   render: function() {
+    console.log(this.props);
+    console.log(this.state);
     return (
       <h1>Ololo</h1>
     );
@@ -38,13 +35,7 @@ var QuestionView = React.createClass({
    * Event handler for 'change' events coming from the QuestionsStore
    */
   _onChange: function() {
-    console.log('---');
-    console.log('getQuestions');
-    console.log(getQuestions());
-    console.log('---');
-    console.log();
-
-    this.setState(getQuestions());
+    //this.setState(getQuestions());
   }
 
 });

@@ -31,7 +31,7 @@ let MainSection = React.createClass({
         <ul id="questions-list">{questions}</ul>
       </section>
     );
-  },
+  }
 
 });
 
