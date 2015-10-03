@@ -40,8 +40,10 @@ function create(text) {
       answers: []
     };
     syncCollection();
+  } else {
+    console.error('You do not have permissions');
+    //TODO: add redirecting to login page
   }
-
 }
 
 /**
@@ -61,7 +63,6 @@ function update (id, updates) {
  *
  */
 function addAnswer (params) {
-  console.log(params)
   _questions[params.questionId]['answers'].push({
     id: getId(),
     questionId: params.questionId,
@@ -196,9 +197,12 @@ AppDispatcher.register(function(action) {
           text: action.text.trim(),
           userName: UserStore.getCurrentUser()
         });
+        QuestionStore.emitChange();
+      } else {
+        //TODO: add redirecting to login page
+        console.error('You do not have permissions')
       }
 
-      QuestionStore.emitChange();
       break;
 
     case QuestionConstants.QUESTION_SET_CHOSEN_ANSWER:

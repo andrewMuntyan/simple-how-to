@@ -3,6 +3,7 @@ import QuestionActions from '../../actions/QuestionActions';
 import QuestionTextInput from './../common/TextInput.react.js';
 import { Router, Route, Link, IndexRoute } from 'react-router'
 import classNames from 'classnames';
+import UserStore from './../../stores/UserStore';
 
 let QuestionItem = React.createClass({
 
@@ -42,10 +43,11 @@ let QuestionItem = React.createClass({
         })}
         key={question.id}>
         <div className="view">
-          <Link to={`/question/${question.id}`}>{question.text} by {question.author}</Link>
+
           <label onDoubleClick={this._onDoubleClick}>
             {question.text} by {question.author}
           </label>
+          <Link to={`/question/${question.id}`}>more...</Link>
         </div>
         {input}
       </li>
@@ -53,7 +55,11 @@ let QuestionItem = React.createClass({
   },
 
   _onDoubleClick: function() {
-    this.setState({isEditing: true});
+    let question = this.props.question;
+    if (UserStore.getCurrentUser() === question.author) {
+      this.setState({isEditing: true});
+    }
+
   },
 
   /**
