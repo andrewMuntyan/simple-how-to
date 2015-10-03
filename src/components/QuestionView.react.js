@@ -3,12 +3,17 @@ import React from 'react';
 import QuestionsStore from './../stores/QuestionsStore';
 import QuestionActions from '../actions/QuestionActions';
 import QuestionTextInput from './QuestionTextInput.react';
+import AnswerItem from './AnswerItem.react';
+import { Link } from 'react-router';
+import classNames from 'classnames';
 
 
 let QuestionView = React.createClass({
   getInitialState() {
+    let questionId = this.props.routeParams.id;
     return {
-      question: QuestionsStore.getById(this.props.routeParams.id)
+      questionId: questionId,
+      question: QuestionsStore.getById(questionId)
     };
   },
 
@@ -20,22 +25,68 @@ let QuestionView = React.createClass({
     QuestionsStore.removeChangeListener(this._onChange);
   },
 
+  renderQuestionView() {
+    let question = this.state.question;
+    let answers = question.answers.map((answer) => {
+      return <AnswerItem key={answer.id} answer={answer} />;
+    });
+    let questionClassNames = classNames({
+      'completed': question.hasChosenAnswer
+    });
+    return(
+      <div className={questionClassNames}>
+        <h1>Question Title</h1>
+        <div className="question-body">{question.text}</div>
+        {this.renderAnswerForm()}
+        <div className="answers-list">{answers}</div>
+      </div>
+    );
+  },
+
+  renderAnswerForm() {
+    return this.state.question.hasChosenAnswer ?
+      null :
+      (
+        <div className="answer-form">
+          <QuestionTextInput
+            id="new-answer"
+            placeholder="Answer here"
+            onSave={this._onAnswer}
+            />
+        </div>
+      )
+  },
+
+  renderErrorView() {
+    return(
+      <div>
+        <h1>There is no question with id {this.state.questionId}</h1>
+        <Link to='/'>Look for a new one here</Link>
+      </div>
+    );
+  },
+
   /**
    * @return {object}
    */
-  render: function() {
-    console.log(this.props);
-    console.log(this.state);
-    return (
-      <h1>Ololo</h1>
-    );
+  render() {
+    return this.state.question ? this.renderQuestionView() : this.renderErrorView()
+  },
+
+  _onAnswer(text) {
+    if (text.trim()) {
+      //TODO: implement getting userName
+      QuestionActions.addAnswer('user', text, this.state.questionId);
+    }
   },
 
   /**
    * Event handler for 'change' events coming from the QuestionsStore
    */
-  _onChange: function() {
-    //this.setState(getQuestions());
+  _onChange() {
+    this.setState({
+      question: QuestionsStore.getById(this.state.questionId)
+    })
   }
 
 });

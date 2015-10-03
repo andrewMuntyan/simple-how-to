@@ -37,12 +37,11 @@ let QuestionItem = React.createClass({
     return (
       <li
         className={classNames({
-          'completed': question.hasCorrectAnswer,
+          'completed': question.hasChosenAnswer,
           'editing': this.state.isEditing
         })}
         key={question.id}>
         <div className="view">
-
           <Link to={`/question/${question.id}`} title={question.text}>{question.text}</Link>
           <label onDoubleClick={this._onDoubleClick}>
             {question.text}

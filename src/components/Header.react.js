@@ -30,7 +30,6 @@ var Header = React.createClass({
     if (text.trim()){
       QuestionActions.create(text);
     }
-
   }
 
 });

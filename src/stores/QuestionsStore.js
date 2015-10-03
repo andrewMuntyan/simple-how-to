@@ -12,20 +12,30 @@ var CHANGE_EVENT = 'change';
 var existingQuestions = localStorage.getItem('_questions');
 var _questions = existingQuestions ? JSON.parse(existingQuestions) : {};
 
+
+/**
+ * Get "random" id.
+ *
+ */
+function getId() {
+  // Using the current timestamp + random number in place of a real id.
+  return (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
+}
+
+
 /**
  * Create a Question item.
  * @param  {string} text The content of the Question
  * @param  {string} author Question Author
  */
 function create(text, author) {
-
-  // Using the current timestamp + random number in place of a real id.
-  var id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
+  let id = getId();
   _questions[id] = {
     id: id,
-    hasCorrectAnswer: false,
+    hasChosenAnswer: false,
     text: text,
-    author: author
+    author: author,
+    answers: []
   };
   syncCollection();
 }
@@ -36,15 +46,55 @@ function create(text, author) {
  * @param {object} updates An object literal containing only the data to be
  *     updated.
  */
-function update(id, updates) {
+function update (id, updates) {
   _questions[id] = assign({}, _questions[id], updates);
   syncCollection();
 }
 
+/**
+ * Add Answer to particular question.
+ * @param  {object} params. An object with answer data: userName, text, questionId
+ *
+ */
+function addAnswer (params) {
+  _questions[params.questionId]['answers'].push({
+    id: getId(),
+    questionId: params.questionId,
+    text: params.text,
+    author: params.userName,
+    isChosen: false
+  });
+  syncCollection();
+}
+
+/**
+ * Set chosen answer.
+ * @param  {string} questionId
+ * @param {string} answerId
+ */
+function setChosenAnswer (questionId, answerId) {
+  let question = QuestionStore.getById(questionId);
+  let answers = question.answers;
+  answers.forEach((answer) => {
+    answer.isChosen = answer.id === answerId && !answer.isChosen;
+  });
+  update(questionId, {hasChosenAnswer: checkChosenAnswer(answers)})
+}
+
+/**
+ * Check availability of chosen answer in answers array
+ * @param  {Array} answers Array of answers
+ */
+function checkChosenAnswer (answers) {
+  return answers.some((answer) => {return answer.isChosen})
+}
+
+/**
+ * Save current questions collection to localStorage.
+ */
 function syncCollection () {
   localStorage.setItem('_questions', JSON.stringify(_questions));
 }
-
 
 
 var QuestionStore = assign({}, EventEmitter.prototype, {
@@ -56,7 +106,7 @@ var QuestionStore = assign({}, EventEmitter.prototype, {
   getWithAnswer() {
     //TODO: finish this method
     //for (var id in _questions) {
-    //  if (!_questions[id].hasCorrectAnswer) {
+    //  if (!_questions[id].hasChosenAnswer) {
     //    return false;
     //  }
     //}
@@ -70,7 +120,7 @@ var QuestionStore = assign({}, EventEmitter.prototype, {
   getWithoutAnswer() {
     //TODO: finish this method
     //for (var id in _questions) {
-    //  if (!_questions[id].hasCorrectAnswer) {
+    //  if (!_questions[id].hasChosenAnswer) {
     //    return false;
     //  }
     //}
@@ -136,7 +186,17 @@ AppDispatcher.register(function(action) {
       break;
 
     case QuestionConstants.QUESTION_ADD_ANSWER:
-      //TODO: finish this method
+      addAnswer({
+        questionId: action.questionId,
+        text: action.text.trim(),
+        userName: action.userName
+      });
+      QuestionStore.emitChange();
+      break;
+
+    case QuestionConstants.QUESTION_SET_CHOSEN_ANSWER:
+      setChosenAnswer(action.questionId, action.answerId);
+      QuestionStore.emitChange();
       break;
 
     default:
