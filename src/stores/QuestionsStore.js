@@ -17,7 +17,8 @@ let CHANGE_EVENT = 'change',
   _filtersState = {
     onlyAnswered: false,
     onlyUnanswered: false
-  };
+  },
+  _haveActiveFilter = false;
 
 
 /**
@@ -117,12 +118,14 @@ function filterQuestions (filter, filterState) {
         onlyAnswered: true,
         onlyUnanswered: false
       };
+      _haveActiveFilter = true;
     } else {
       _displayedQuestions = objectFilter(_questions,() => {return true})
       _filtersState = {
         onlyAnswered: false,
         onlyUnanswered: false
       };
+      _haveActiveFilter = false;
     }
   } else if (filter === 'unanswered') {
     if (filterState) {
@@ -133,12 +136,14 @@ function filterQuestions (filter, filterState) {
         onlyAnswered: false,
         onlyUnanswered: true
       };
+      _haveActiveFilter = true;
     } else {
-      _displayedQuestions = objectFilter(_questions,() => {return true})
+      _displayedQuestions = objectFilter(_questions,() => {return true});
       _filtersState = {
         onlyAnswered: false,
         onlyUnanswered: false
       };
+      _haveActiveFilter = false;
     }
   }
   _displayedQuestions = sortItemsInCollection(_displayedQuestions, 'created', -1);
@@ -202,7 +207,8 @@ let QuestionStore = assign({}, EventEmitter.prototype, {
    * @return {object}
    */
   getAll() {
-    return _displayedQuestions = _questions = sortItemsInCollection(_questions, 'created', -1);
+    let questions = _haveActiveFilter ? _displayedQuestions : _questions;
+    return sortItemsInCollection(questions, 'created', -1);
   },
 
   /**
