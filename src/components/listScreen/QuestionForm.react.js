@@ -32,7 +32,7 @@ var Header = React.createClass({
   render() {
     return (
       <div>
-        <h1 className="q-list-header">Questions!!!</h1>
+        <h1 className="q-list-heading">We can help You with anything You want ;)</h1>
         <div className="filter">
           <div className="switcher">
             <Toggle

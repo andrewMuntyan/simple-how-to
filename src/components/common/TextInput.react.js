@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
-let ENTER_KEY_CODE = 13;
 import TextField from 'material-ui/lib/text-field';
+import Snackbar from 'material-ui/lib/snackbar';
 
 var QuestionTextInput = React.createClass({
 
@@ -12,7 +12,7 @@ var QuestionTextInput = React.createClass({
     value: PropTypes.string
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       value: this.props.value || ''
     };
@@ -21,17 +21,18 @@ var QuestionTextInput = React.createClass({
   /**
    * @return {object}
    */
-  render: function() /*object*/ {
+  render() /*object*/ {
     return (
       <TextField
         floatingLabelText={this.props.placeholder}
-        onEnterKeyDown={this._save}
+        onEnterKeyDown={this.save}
+        onClick={this.onClick}
         type="text"
-        onBlur={this._save}
-        onChange={this._onChange}
+        onChange={this.onChange}
         value={this.state.value}
         fullWidth={this.props.fullWidth}
         style={this.props.style}
+        disabled={this.props.disabled}
       />
     );
   },
@@ -40,7 +41,7 @@ var QuestionTextInput = React.createClass({
    * Invokes the callback passed in as onSave, allowing this component to be
    * used in different ways.
    */
-  _save: function() {
+  save() {
     let value = this.state.value;
     if (value && value.length && typeof value === 'string') {
       this.props.onSave(this.state.value);
@@ -54,12 +55,29 @@ var QuestionTextInput = React.createClass({
   /**
    * @param {object} event
    */
-  _onChange: function(/*object*/ event) {
+  onChange(/*object*/ event) {
     this.setState({
       value: event.target.value
     });
+  },
+  
+  onClick() {
+    if (this.props.disabled) {
+      let snackbar = React.render(
+        <Snackbar
+          message="You already have the correct answer. So, You can't add more answers"
+          autoHideDuration={5000}
+          style={{
+            position: 'fixed',
+            left: 15,
+            bottom: 15
+          }}
+          />,
+        document.querySelector('#popoverContainer')
+      );
+      snackbar.show()
+    }
   }
-
 });
 
 export default QuestionTextInput;

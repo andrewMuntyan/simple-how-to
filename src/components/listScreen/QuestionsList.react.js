@@ -6,7 +6,6 @@ import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import ListDivider from 'material-ui/lib/lists/list-divider';
 import Avatar from 'material-ui/lib/avatar';
-import FlatButton from 'material-ui/lib/flat-button';
 import { Router, Route, Link, History } from 'react-router';
 
 
@@ -84,8 +83,11 @@ var QuestionsList = React.createClass({
 
     return (
       <section id="main">
-        {questions.length ? <List subheader="Questions">{questions}</List> : 'There are no questions yet'}
-
+        {
+          questions.length ?
+            <List subheader="Questions">{questions}</List> :
+            'There are no questions yet'
+        }
       </section>
     );
   },

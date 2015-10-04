@@ -30,7 +30,10 @@ let LoginView = React.createClass({
             marginBottom: '15px'
           }}
         />
-        <FlatButton style={{marginLeft: -130, width: 130}} onClick={this._onBtnClick} label="Let me in" />
+        <FlatButton style={{marginLeft: -130, width: 130}}
+                    onClick={this._onBtnClick}
+                    label="Let me in"
+        />
       </div>
     );
   },

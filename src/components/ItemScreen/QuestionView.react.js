@@ -1,4 +1,4 @@
-import '../__styles/common/common.scss';
+import './../__styles/q-single-screen.scss';
 import React from 'react';
 import QuestionsStore from './../../stores/QuestionsStore';
 import QuestionActions from '../../actions/QuestionActions';
@@ -6,6 +6,8 @@ import QuestionTextInput from './../common/TextInput.react.js';
 import AnswerItem from './AnswerItem.react';
 import classNames from 'classnames';
 import UserStore from './../../stores/UserStore';
+import Paper from 'material-ui/lib/paper.js';
+import Avatar from 'material-ui/lib/avatar';
 
 
 let QuestionView = React.createClass({
@@ -25,55 +27,13 @@ let QuestionView = React.createClass({
     QuestionsStore.removeChangeListener(this._onChange);
   },
 
-  renderQuestionView() {
-    let question = this.state.question;
-    let showChoseBtn = UserStore.getCurrentUser() === question.author;
-    let answers = question.answers.map((answer) => {
-      return <AnswerItem key={answer.id} answer={answer} showChoseBtn={showChoseBtn}/>;
-    });
-    let questionItemViewClassNames = classNames({
-      'completed': question.hasChosenAnswer
-    });
-    return(
-      <div className={questionItemViewClassNames}>
-        <h1>Question by {question.author}</h1>
-        <div className="question-body">{question.text}</div>
-
-        {this.renderAnswerForm()}
-
-        <div className="answers-list">{answers}</div>
-      </div>
-    );
-  },
-
-  renderAnswerForm() {
-    return this.state.question.hasChosenAnswer ?
-      null :
-      (
-        <div className="answer-form">
-          <QuestionTextInput
-            id="new-answer"
-            placeholder="Answer here"
-            onSave={this._onAnswer}
-            />
-        </div>
-      )
-  },
-
-  renderErrorView() {
-    return(
-      <div>
-        <h1>There is no question with id {this.state.questionId}</h1>
-        <Link to='/'>Look for a new one here</Link>
-      </div>
-    );
-  },
-
   /**
-   * @return {object}
+   * Event handler for 'change' events coming from the QuestionsStore
    */
-  render() {
-    return this.state.question ? this.renderQuestionView() : this.renderErrorView()
+    _onChange() {
+    this.setState({
+      question: QuestionsStore.getById(this.state.questionId)
+    })
   },
 
   _onAnswer(text) {
@@ -83,12 +43,97 @@ let QuestionView = React.createClass({
   },
 
   /**
-   * Event handler for 'change' events coming from the QuestionsStore
+   *
+   * @param {string} questionId
+   * @param {string} answerId
    */
-  _onChange() {
-    this.setState({
-      question: QuestionsStore.getById(this.state.questionId)
-    })
+  setChosenState(questionId, answerId) {
+    QuestionActions.setChosenAnswer(questionId, answerId);
+  },
+
+  /**
+   * @return {object}
+   */
+  render() {
+    return this.state.question ? this.renderQuestionScreenView() : this.renderErrorView()
+  },
+
+  /**
+   *
+   * @return {object}
+   */
+  renderQuestionScreenView() {
+    let question = this.state.question;
+    let questionItemViewClassNames = classNames({
+      'completed': question.hasChosenAnswer,
+      'q-single-screen': true
+    });
+    //let answers = question.answers.map(this.renderAnswerItem);
+    let answers = question.answers.map((answer) => {
+      return <AnswerItem answer={answer} question={question}/>
+    });
+    //TODO: move this function to shared helper
+    let authorFirstLetter = question.author[0];
+    return(
+      <div className={questionItemViewClassNames}>
+        <h1 className='single-question-heading'>
+          Question by <Avatar size="30">{authorFirstLetter}</Avatar> {question.author}
+        </h1>
+
+        <Paper zDepth={2} style={{
+          padding: 15,
+          marginBottom: 25
+        }}>
+          {question.text}
+        </Paper>
+
+        {this.renderAnswerForm()}
+
+        {
+          answers.length ?
+            <ul className="q-answers-list">{answers}</ul> :
+            'There are no answers yet'
+        }
+      </div>
+    );
+  },
+
+  /**
+   *
+   * @return {object}
+   */
+  renderAnswerForm() {
+    return (
+      <div className="answer-form">
+        <QuestionTextInput
+          id="new-answer"
+          placeholder="Answer here"
+          onSave={this._onAnswer}
+          fullWidth={true}
+          disabled={this.state.question.hasChosenAnswer}
+          //TODO: move textInput styles to shared place
+          style={{
+              fontSize: '26px',
+              height: '85px',
+              marginTop: '15px',
+              marginBottom: '15px'
+            }}
+          />
+      </div>
+    );
+  },
+
+  /**
+   *
+   * @return {object}
+   */
+  renderErrorView() {
+    return(
+      <div>
+        <h1>There is no question with id {this.state.questionId}</h1>
+        <Link to='/'>Look for a new one here</Link>
+      </div>
+    );
   }
 
 });
