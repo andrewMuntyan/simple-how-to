@@ -22,20 +22,20 @@ let CHANGE_EVENT = 'change',
  */
 function getId() {
   // Using the current timestamp + random number in place of a real id.
-  //return (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
-  return +new Date()
+  return (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
 }
 
 /**
- * Create a Question item.
+ * Create a Question item and save Questions in localstore
  * @param  {string} text The content of the Question
- * @param  {string} author Question Author
+ *
  */
 function create(text) {
   if(UserStore.hasPermissions()){
     let id = getId();
     _questions[id] = {
       id: id,
+      created: +new Date(),
       hasChosenAnswer: false,
       text: text,
       author: UserStore.getCurrentUser(),
@@ -67,6 +67,7 @@ function update (id, updates) {
 function addAnswer (params) {
   _questions[params.questionId]['answers'].push({
     id: getId(),
+    created: +new Date(),
     questionId: params.questionId,
     text: params.text,
     author: params.userName,
@@ -120,6 +121,40 @@ function filterQuestions (type) {
     default:
       _displayedQuestions = objectFilter(_questions,() => {return true})
   }
+  _displayedQuestions = sortItemsInCollection(_displayedQuestions, 'created', -1);
+}
+
+/**
+ * sort hash by 'prop' property value
+ *
+ * before
+ * {a:{prop: 5}, b:{prop: 1}, c:{prop: 2}}
+ *
+ * after
+ * {b:{prop: 1}, c:{prop: 2}, a:{prop: 5}}
+ *
+ * @param  {object} obj target hash
+ * @param  {string} prop property name
+ * @param  {number} type descending (-1) ascending (by default)
+
+ */
+
+function sortItemsInCollection(obj, prop, type) {
+  let temp_array = [];
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      temp_array.push(key);
+    }
+  }
+  temp_array.sort((a, b) => {
+    return (obj[a][prop] - obj[b][prop]) * (type ? type : 1);
+  });
+
+  let temp_obj = {};
+  for (let i=0; i<temp_array.length; i++) {
+    temp_obj[temp_array[i]] = obj[temp_array[i]];
+  }
+  return temp_obj;
 }
 
 //TODO: don't be lazy. use Underscore or lodash next time
@@ -141,14 +176,14 @@ function syncCollection () {
   localStorage.setItem('_questions', JSON.stringify(_questions));
 }
 
-var QuestionStore = assign({}, EventEmitter.prototype, {
+let QuestionStore = assign({}, EventEmitter.prototype, {
 
   /**
    * Get the entire collection of Questions.
    * @return {object}
    */
   getAll() {
-    return _displayedQuestions;
+    return _displayedQuestions = sortItemsInCollection(_displayedQuestions, 'created', -1);
   },
 
   /**
@@ -185,10 +220,9 @@ AppDispatcher.register(function(action) {
 
   switch(action.actionType) {
     case QuestionConstants.QUESTION_CREATE:
-      console.log('QuestionConstants.QUESTION_CREATE');
       text = action.text.trim();
       if (text !== '') {
-        create(text, action.author);
+        create(text);
         QuestionStore.emitChange();
       }
       break;
