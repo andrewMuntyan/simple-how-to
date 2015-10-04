@@ -141,7 +141,7 @@ function filterQuestions (filter, filterState) {
       };
     }
   }
-  _questions = sortItemsInCollection(_displayedQuestions, 'created', -1);
+  _displayedQuestions = sortItemsInCollection(_displayedQuestions, 'created', -1);
 }
 
 /**
@@ -202,7 +202,7 @@ let QuestionStore = assign({}, EventEmitter.prototype, {
    * @return {object}
    */
   getAll() {
-    return _questions = sortItemsInCollection(_questions, 'created', -1);
+    return _displayedQuestions = _questions = sortItemsInCollection(_questions, 'created', -1);
   },
 
   /**
