@@ -13,7 +13,11 @@ import UserStore from './UserStore';
 let CHANGE_EVENT = 'change',
   existingQuestions = localStorage.getItem('_questions'),
   _questions = existingQuestions ? JSON.parse(existingQuestions) : {},
-  _displayedQuestions = _questions;
+  _displayedQuestions = _questions,
+  _filtersState = {
+    onlyAnswered: false,
+    onlyUnanswered: false
+  };
 
 
 /**
@@ -99,27 +103,43 @@ function checkChosenAnswer (answers) {
 }
 
 /**
- * set to _displayedQuestions array with only requested type question
- * @param  {string} type
+ * set to _displayedQuestions hash with only requested type question
+ * @param  {string} filter
+ * @param  {boolean} filterState
  */
-function filterQuestions (type) {
-  switch(type) {
-    case 'unanswered':
+function filterQuestions (filter, filterState) {
+  if (filter === 'answered') {
+    if (filterState) {
+        _displayedQuestions = objectFilter(_questions, (question) => {
+          return question.hasChosenAnswer
+        });
+      _filtersState = {
+        onlyAnswered: true,
+        onlyUnanswered: false
+      };
+    } else {
+      _displayedQuestions = objectFilter(_questions,() => {return true})
+      _filtersState = {
+        onlyAnswered: false,
+        onlyUnanswered: false
+      };
+    }
+  } else if (filter === 'unanswered') {
+    if (filterState) {
       _displayedQuestions = objectFilter(_questions, (question) => {
         return !question.hasChosenAnswer
       });
-
-      break;
-
-    case 'answered':
-      _displayedQuestions = objectFilter(_questions, (question) => {
-        return question.hasChosenAnswer
-      });
-
-      break;
-
-    default:
+      _filtersState = {
+        onlyAnswered: false,
+        onlyUnanswered: true
+      };
+    } else {
       _displayedQuestions = objectFilter(_questions,() => {return true})
+      _filtersState = {
+        onlyAnswered: false,
+        onlyUnanswered: false
+      };
+    }
   }
   _displayedQuestions = sortItemsInCollection(_displayedQuestions, 'created', -1);
 }
@@ -138,7 +158,6 @@ function filterQuestions (type) {
  * @param  {number} type descending (-1) ascending (by default)
 
  */
-
 function sortItemsInCollection(obj, prop, type) {
   let temp_array = [];
   for (let key in obj) {
@@ -183,7 +202,7 @@ let QuestionStore = assign({}, EventEmitter.prototype, {
    * @return {object}
    */
   getAll() {
-    return _displayedQuestions = sortItemsInCollection(_displayedQuestions, 'created', -1);
+    return _displayedQuestions = _questions = sortItemsInCollection(_questions, 'created', -1);
   },
 
   /**
@@ -193,6 +212,15 @@ let QuestionStore = assign({}, EventEmitter.prototype, {
    */
   getById(id) {
     return _questions[id];
+  },
+
+  /**
+   *
+   * @param {string} filter
+   * @return {boolean}
+   */
+  getFiltersState(filter) {
+    return _filtersState[filter]
   },
 
   emitChange() {
@@ -256,7 +284,7 @@ AppDispatcher.register(function(action) {
       break;
 
     case QuestionConstants.QUESTION_LIST_FILTER:
-      filterQuestions(action.type);
+      filterQuestions(action.filter, action.filterState);
       QuestionStore.emitChange();
       break;
 

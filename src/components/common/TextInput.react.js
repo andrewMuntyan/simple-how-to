@@ -31,6 +31,7 @@ var QuestionTextInput = React.createClass({
         onChange={this._onChange}
         value={this.state.value}
         fullWidth={this.props.fullWidth}
+        style={this.props.style}
       />
     );
   },

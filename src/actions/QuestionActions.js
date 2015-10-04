@@ -7,10 +7,15 @@ import QuestionConstants from '../constants/QuestionConstants';
 
 var QuestionActions = {
 
-  filterQuestions(type) {
+  /**
+   * @param  {string} filter
+   * @param  {boolean} filterState
+   */
+  filterQuestions(filter, filterState) {
     AppDispatcher.dispatch({
       actionType: QuestionConstants.QUESTION_LIST_FILTER,
-      type: type
+      filter: filter,
+      filterState: filterState
     });
   },
 

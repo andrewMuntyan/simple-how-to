@@ -1,0 +1,16 @@
+@import "common/shared";
+
+.q-list-header {
+  font-size: 24px;
+  margin: 15px 0;
+}
+
+.filter {
+  overflow: hidden;
+  padding-top: 20px;
+  .switcher {
+    @extend .fl-l;
+    width: 170px;
+    padding-right: 30px;
+  }
+}

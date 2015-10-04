@@ -22,8 +22,15 @@ let LoginView = React.createClass({
           placeholder="Type Name here"
           onSave={this._onLogin}
           ref='loginField'
+          fullWidth={true}
+          style={{
+            fontSize: '26px',
+            height: '85px',
+            marginTop: '15px',
+            marginBottom: '15px'
+          }}
         />
-        <FlatButton style={{marginLeft: '10px'}} onClick={this._onBtnClick} label="Let me in" />
+        <FlatButton style={{marginLeft: -130, width: 130}} onClick={this._onBtnClick} label="Let me in" />
       </div>
     );
   },
