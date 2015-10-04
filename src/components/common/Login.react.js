@@ -6,10 +6,11 @@ import QuestionTextInput from './TextInput.react.js';
 import Auth from './../../utils/auth';
 import { Router, Route, Link, History } from 'react-router'
 import FlatButton from 'material-ui/lib/flat-button';
+import muiFix from './../../utils/mui-fix-mixin';
 
 
 let LoginView = React.createClass({
-  mixins: [ History ],
+  mixins: [ History, muiFix ],
 
   /**
    * @return {object}

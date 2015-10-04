@@ -6,10 +6,11 @@ import { Router, Route, Link, History } from 'react-router';
 import FlatButton from 'material-ui/lib/flat-button';
 import Avatar from 'material-ui/lib/avatar';
 import AppBar from 'material-ui/lib/app-bar';
+import muiFix from './../utils/mui-fix-mixin';
 
 
 var HowToApp = React.createClass({
-  mixins: [ History ],
+  mixins: [ History, muiFix ],
 
   getInitialState() {
     return {
@@ -48,9 +49,7 @@ var HowToApp = React.createClass({
             style={{
               minHeight: '65px'
             }}
-
           />
-
         </header>
 
         {this.props.children}
@@ -64,7 +63,7 @@ var HowToApp = React.createClass({
     return(
       <div>
         <div className="l-side">
-          <Avatar size="35">{firstLetter}</Avatar>
+          <Avatar size={35}>{firstLetter}</Avatar>
           <h2 className="user-name">{this.state.user}</h2>
         </div>
         <div className="r-side">

@@ -8,9 +8,12 @@ import classNames from 'classnames';
 import UserStore from './../../stores/UserStore';
 import Paper from 'material-ui/lib/paper.js';
 import Avatar from 'material-ui/lib/avatar';
+import muiFix from './../../utils/mui-fix-mixin';
 
 
 let QuestionView = React.createClass({
+  mixins: [ muiFix ],
+
   getInitialState() {
     let questionId = this.props.routeParams.id;
     return {
@@ -70,14 +73,14 @@ let QuestionView = React.createClass({
     });
     //let answers = question.answers.map(this.renderAnswerItem);
     let answers = question.answers.map((answer) => {
-      return <AnswerItem answer={answer} question={question}/>
+      return <AnswerItem key={answer.id} answer={answer} question={question}/>
     });
     //TODO: move this function to shared helper
     let authorFirstLetter = question.author[0];
     return(
       <div className={questionItemViewClassNames}>
         <h1 className='single-question-heading'>
-          Question by <Avatar size="30">{authorFirstLetter}</Avatar> {question.author}
+          Question by <Avatar size={30}>{authorFirstLetter}</Avatar> {question.author}
         </h1>
 
         <Paper zDepth={2} style={{

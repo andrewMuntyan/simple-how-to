@@ -7,6 +7,7 @@ import ListItem from 'material-ui/lib/lists/list-item';
 import ListDivider from 'material-ui/lib/lists/list-divider';
 import Avatar from 'material-ui/lib/avatar';
 import { Router, Route, Link, History } from 'react-router';
+import muiFix from './../../utils/mui-fix-mixin';
 
 
 function getQuestions() {
@@ -17,14 +18,10 @@ function getQuestions() {
 
 
 var QuestionsList = React.createClass({
-  mixins: [ History ],
+  mixins: [ History, muiFix ],
 
   getInitialState() {
     return getQuestions();
-  },
-
-  contextTypes: {
-    muiTheme: React.PropTypes.object.isRequired
   },
 
   componentDidMount() {
@@ -62,7 +59,7 @@ var QuestionsList = React.createClass({
         }}
         >&#10003;</Avatar>;
       questions.push(
-        <div>
+        <div key={question.id}>
           <ListItem
             leftAvatar={<Avatar>{firstLetter}</Avatar>}
             primaryText={`${question.author} asks:`}
