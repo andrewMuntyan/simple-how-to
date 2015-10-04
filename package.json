@@ -1,7 +1,7 @@
 {
-  "name": "",
+  "name": "simple-how-to",
   "version": "0.0.1",
-  "description": "",
+  "description": "Simple implementation of question-answer system. React. Vanilla Flux.",
   "scripts": {
     "start": "node server.js",
     "lint": "eslint src"
