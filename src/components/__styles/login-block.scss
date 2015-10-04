@@ -1,0 +1,22 @@
+@import "common/mixins";
+
+.login-block {
+  width: 370px;
+  margin: 0 auto;
+}
+.usr-blck {
+  text-align: right;
+  .l-side {
+    text-align: center;
+    vertical-align: top;
+    display: inline-block;
+  }
+  .user-name {
+    @include ellipsis();
+    max-width: 150px;
+  }
+  .r-side {
+    @extend .l-side;
+    margin: 7px 0 0 15px;
+  }
+}

@@ -1,12 +1,11 @@
+import './../__styles/login-block.scss';
 import React from 'react';
 import UserStore from './../../stores/UserStore';
 import UserActions from '../../actions/UserActions';
 import QuestionTextInput from './TextInput.react.js';
 import Auth from './../../utils/auth';
 import { Router, Route, Link, History } from 'react-router'
-
-//import classNames from 'classnames';
-
+import FlatButton from 'material-ui/lib/flat-button';
 
 
 let LoginView = React.createClass({
@@ -17,15 +16,14 @@ let LoginView = React.createClass({
    */
   render() {
     return (
-      <div>
-        <h1>You must be authorized to continue to use this service</h1>
+      <div className="login-block">
         <QuestionTextInput
           id="login-input"
           placeholder="Type Name here"
           onSave={this._onLogin}
           ref='loginField'
-          />
-        <button onClick={this._onBtnClick}>Do it!</button>
+        />
+        <FlatButton style={{marginLeft: '10px'}} onClick={this._onBtnClick} label="Let me in" />
       </div>
     );
   },

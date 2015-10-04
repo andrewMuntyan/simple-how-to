@@ -4,7 +4,6 @@ import QuestionsStore from './../../stores/QuestionsStore';
 import QuestionActions from '../../actions/QuestionActions';
 import QuestionTextInput from './../common/TextInput.react.js';
 import AnswerItem from './AnswerItem.react';
-import { Link } from 'react-router';
 import classNames from 'classnames';
 import UserStore from './../../stores/UserStore';
 
@@ -32,14 +31,16 @@ let QuestionView = React.createClass({
     let answers = question.answers.map((answer) => {
       return <AnswerItem key={answer.id} answer={answer} showChoseBtn={showChoseBtn}/>;
     });
-    let questionClassNames = classNames({
+    let questionItemViewClassNames = classNames({
       'completed': question.hasChosenAnswer
     });
     return(
-      <div className={questionClassNames}>
-        <h1>Question Title</h1>
+      <div className={questionItemViewClassNames}>
+        <h1>Question by {question.author}</h1>
         <div className="question-body">{question.text}</div>
+
         {this.renderAnswerForm()}
+
         <div className="answers-list">{answers}</div>
       </div>
     );

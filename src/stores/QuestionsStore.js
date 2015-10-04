@@ -22,7 +22,8 @@ let CHANGE_EVENT = 'change',
  */
 function getId() {
   // Using the current timestamp + random number in place of a real id.
-  return (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
+  //return (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
+  return +new Date()
 }
 
 /**
@@ -141,34 +142,6 @@ function syncCollection () {
 }
 
 var QuestionStore = assign({}, EventEmitter.prototype, {
-
-  /**
-   * Get Questions that have correct answer.
-   * @return {object}
-   */
-  getAnswered() {
-    //TODO: finish this method
-    //for (var id in _questions) {
-    //  if (!_questions[id].hasChosenAnswer) {
-    //    return false;
-    //  }
-    //}
-    //return true;
-  },
-
-  /**
-   * Get Questions that does not have correct answer.
-   * @return {object}
-   */
-  getUnanswered() {
-    //TODO: finish this method
-    //for (var id in _questions) {
-    //  if (!_questions[id].hasChosenAnswer) {
-    //    return false;
-    //  }
-    //}
-    //return true;
-  },
 
   /**
    * Get the entire collection of Questions.

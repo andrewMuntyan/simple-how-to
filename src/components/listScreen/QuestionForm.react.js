@@ -24,7 +24,7 @@ var Header = React.createClass({
    */
   render() {
     return (
-      <header id="header">
+      <div>
         <h1>Questions!</h1>
         <div className="filter">
           <button onClick={this.filter.bind(null, 'unanswered')}>Unanswered</button>
@@ -32,7 +32,7 @@ var Header = React.createClass({
           <button onClick={this.filter.bind(null, 'all')}>All</button>
         </div>
         {this.renderQuestionInput()}
-      </header>
+      </div>
     );
   },
 
@@ -43,6 +43,7 @@ var Header = React.createClass({
           id="new-question"
           placeholder="Ask here"
           onSave={this._onSave}
+          fullWidth={true}
         /> :
         null
     );

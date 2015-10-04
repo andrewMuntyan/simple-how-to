@@ -10,3 +10,34 @@ body {
   -o-font-smoothing: antialiased;
   font-smoothing: antialiased;
 }
+.fl-l {
+  float: left;
+}
+.fl-r {
+  float: right;
+}
+.g-container {
+  max-width: 1000px;
+  min-width: 700px;
+  width: 100%;
+  margin: 0 auto;
+}
+.g-header {
+  overflow: hidden;
+
+  .h-left {
+    @extend .fl-l;
+  }
+
+  .h-right {
+    @extend .fl-r;
+  }
+}
+.logo {
+  height: 50px;
+
+  img {
+    height: 100%;
+    display: block;
+  }
+}

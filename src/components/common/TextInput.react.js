@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 let ENTER_KEY_CODE = 13;
+import TextField from 'material-ui/lib/text-field';
 
 var QuestionTextInput = React.createClass({
 
@@ -22,15 +23,14 @@ var QuestionTextInput = React.createClass({
    */
   render: function() /*object*/ {
     return (
-      <input
-        className={this.props.className}
-        id={this.props.id}
-        placeholder={this.props.placeholder}
+      <TextField
+        floatingLabelText={this.props.placeholder}
+        onEnterKeyDown={this._save}
+        type="text"
         onBlur={this._save}
         onChange={this._onChange}
-        onKeyDown={this._onKeyDown}
         value={this.state.value}
-        autoFocus={true}
+        fullWidth={this.props.fullWidth}
       />
     );
   },
@@ -57,15 +57,6 @@ var QuestionTextInput = React.createClass({
     this.setState({
       value: event.target.value
     });
-  },
-
-  /**
-   * @param  {object} event
-   */
-  _onKeyDown: function(event) {
-    if (event.keyCode === ENTER_KEY_CODE) {
-      this._save();
-    }
   }
 
 });

@@ -2,7 +2,10 @@ import './__styles/common/common.scss';
 import React from 'react';
 import UserStore from './../stores/UserStore';
 import UserActions from '../actions/UserActions';
-import { Router, Route, Link, History } from 'react-router'
+import { Router, Route, Link, History } from 'react-router';
+import FlatButton from 'material-ui/lib/flat-button';
+import Avatar from 'material-ui/lib/avatar';
+import AppBar from 'material-ui/lib/app-bar';
 
 
 var HowToApp = React.createClass({
@@ -27,11 +30,28 @@ var HowToApp = React.createClass({
    */
   render() {
     return (
-      <div>
-        <Link to='/'><h1>HowTo logo</h1></Link>
-        <h2>
-          {this.state.user ? this.renderLogged() : this.renderUnlogged()}
-        </h2>
+      <div className="g-container">
+        <header id="header" className="g-header">
+          <AppBar
+            iconElementLeft={
+              <Link to='/' className="logo h-left">
+                <img src={require("./../../static/img/logo.png")} alt="Logo"/>
+              </Link>
+            }
+            iconElementRight={
+              <div className="h-right">
+                <div className="usr-blck">
+                  {this.state.user ? this.renderLogged() : this.renderUnlogged()}
+                </div>
+              </div>
+            }
+            style={{
+              minHeight: '65px'
+            }}
+
+          />
+
+        </header>
 
         {this.props.children}
       </div>
@@ -39,10 +59,17 @@ var HowToApp = React.createClass({
   },
 
   renderLogged() {
+    let user = this.state.user;
+    let firstLetter = user[0];
     return(
       <div>
-        <h2>{this.state.user}</h2>
-        <button onClick={this.logout}>Log out</button>
+        <div className="l-side">
+          <Avatar size="35">{firstLetter}</Avatar>
+          <h2 className="user-name">{this.state.user}</h2>
+        </div>
+        <div className="r-side">
+          <FlatButton style={{float: 'right'}} onClick={this.logout} label="Log out" />
+        </div>
       </div>
     );
   },
@@ -51,8 +78,9 @@ var HowToApp = React.createClass({
     if (this.props.location.pathname !== '/login') {
       return(
         <div>
-          <h2>You should be logged in</h2>
-          <Link to='/login'>Login</Link>
+          <div className="r-side">
+            <FlatButton onClick={this.login} label="Log in" />
+          </div>
         </div>
       )
     }
@@ -62,9 +90,12 @@ var HowToApp = React.createClass({
 
   logout() {
     UserActions.logout(() => {
-      debugger
-      this.history.replaceState(null, '/')
+      this.history.replaceState(null, '/');
     })
+  },
+
+  login() {
+    this.history.pushState(null, '/login');
   },
 
   _onChange() {
