@@ -33,29 +33,8 @@ var Header = React.createClass({
     return (
       <div>
         <h1 className="q-list-heading">We can help You with anything You want ;)</h1>
-        <div className="filter">
-          <div className="switcher">
-            <Toggle
-              name="onlyAnswered"
-              value="onlyAnswered"
-              label="Only answered"
-              onToggle={this.filter.bind(null, 'answered')}
-              defaultToggled={this.state.onlyAnswered}
-              />
-          </div>
-          <div className="switcher">
-            <Toggle
-              name="onlyUnanswered"
-              value="onlyUnanswered"
-              label="Only unanswered"
-              onToggle={this.filter.bind(null, 'unanswered')}
-              defaultToggled={this.state.onlyUnanswered}
-              className="switcher"
-              />
-          </div>
 
-
-        </div>
+        {this.renderSwitchers()}
         {this.renderQuestionInput()}
       </div>
     );
@@ -76,6 +55,34 @@ var Header = React.createClass({
             marginBottom: '15px'
           }}
         /> :
+        null
+    );
+  },
+
+  renderSwitchers(){
+    return (
+      this.state.user ?
+        <div className="filter">
+          <div className="switcher">
+            <Toggle
+              name="onlyAnswered"
+              value="onlyAnswered"
+              label="Only answered"
+              onToggle={this.filter.bind(null, 'answered')}
+              defaultToggled={this.state.onlyAnswered}
+              />
+          </div>
+          <div className="switcher">
+            <Toggle
+              name="onlyUnanswered"
+              value="onlyUnanswered"
+              label="Only unanswered"
+              onToggle={this.filter.bind(null, 'unanswered')}
+              defaultToggled={this.state.onlyUnanswered}
+              className="switcher"
+              />
+          </div>
+        </div> :
         null
     );
   },
