@@ -77,7 +77,12 @@ var QuestionTextInput = React.createClass({
       );
       snackbar.show()
     }
+  },
+
+  getValue(){
+    return this.state.value
   }
+
 });
 
 export default QuestionTextInput;

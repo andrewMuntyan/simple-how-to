@@ -39,12 +39,13 @@ let LoginView = React.createClass({
     );
   },
 
+
   /**
    *
    *
    */
   _onBtnClick() {
-    this._onLogin(this.refs.loginField.value)
+    this._onLogin(this.refs.loginField.getValue())
   },
 
   /**
