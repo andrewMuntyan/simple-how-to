@@ -26,6 +26,11 @@ var Header = React.createClass({
     QuestionsStore.removeChangeListener(this._onChange);
   },
 
+  componentDidUpdate() {
+    this.refs.onlyAnswered.setToggled(this.state.onlyAnswered);
+    this.refs.onlyUnanswered.setToggled(this.state.onlyUnanswered);
+  },
+
   /**
    * @return {object}
    */
@@ -65,20 +70,22 @@ var Header = React.createClass({
         <div className="filter">
           <div className="switcher">
             <Toggle
+              ref='onlyAnswered'
               name="onlyAnswered"
               value="onlyAnswered"
               label="Only answered"
               onToggle={this.filter.bind(null, 'answered')}
-              defaultToggled={this.state.onlyAnswered}
+              defaultToggled={false}
               />
           </div>
           <div className="switcher">
             <Toggle
+              ref='onlyUnanswered'
               name="onlyUnanswered"
               value="onlyUnanswered"
               label="Only unanswered"
               onToggle={this.filter.bind(null, 'unanswered')}
-              defaultToggled={this.state.onlyUnanswered}
+              defaultToggled={false}
               className="switcher"
               />
           </div>
@@ -100,15 +107,7 @@ var Header = React.createClass({
   },
 
   filter(filter, e, filterState) {
-    //console.log(arguments);
-    //debugger
-
-    /**
-    * We need this trick because of behaviour of 'filterState' argument is not correct
-    * and we can't rely on it
-    * */
-    let secondArgument = !this.state[filter === 'answered' ? 'onlyAnswered': 'onlyUnanswered'];
-    QuestionActions.filterQuestions(filter, secondArgument);
+    QuestionActions.filterQuestions(filter, filterState);
   },
 
   _onChange() {

@@ -109,43 +109,68 @@ function checkChosenAnswer (answers) {
  * @param  {boolean} filterState
  */
 function filterQuestions (filter, filterState) {
-  if (filter === 'answered') {
-    if (filterState) {
-        _displayedQuestions = objectFilter(_questions, (question) => {
-          return question.hasChosenAnswer
-        });
-      _filtersState = {
-        onlyAnswered: true,
-        onlyUnanswered: false
-      };
-      _haveActiveFilter = true;
-    } else {
-      _displayedQuestions = objectFilter(_questions,() => {return true})
-      _filtersState = {
-        onlyAnswered: false,
-        onlyUnanswered: false
-      };
-      _haveActiveFilter = false;
-    }
-  } else if (filter === 'unanswered') {
-    if (filterState) {
-      _displayedQuestions = objectFilter(_questions, (question) => {
-        return !question.hasChosenAnswer
-      });
-      _filtersState = {
-        onlyAnswered: false,
-        onlyUnanswered: true
-      };
-      _haveActiveFilter = true;
-    } else {
-      _displayedQuestions = objectFilter(_questions,() => {return true});
-      _filtersState = {
-        onlyAnswered: false,
-        onlyUnanswered: false
-      };
-      _haveActiveFilter = false;
-    }
+  //if (filter === 'answered') {
+  //  if (filterState) {
+  //      _displayedQuestions = objectFilter(_questions, (question) => {
+  //        return question.hasChosenAnswer
+  //      });
+  //    _filtersState = {
+  //      onlyAnswered: true,
+  //      onlyUnanswered: false
+  //    };
+  //    _haveActiveFilter = true;
+  //  } else {
+  //    _displayedQuestions = objectFilter(_questions,() => {return true});
+  //    _filtersState = {
+  //      onlyAnswered: false,
+  //      onlyUnanswered: false
+  //    };
+  //    _haveActiveFilter = false;
+  //  }
+  //} else if (filter === 'unanswered') {
+  //  if (filterState) {
+  //    _displayedQuestions = objectFilter(_questions, (question) => {
+  //      return !question.hasChosenAnswer
+  //    });
+  //    _filtersState = {
+  //      onlyAnswered: false,
+  //      onlyUnanswered: true
+  //    };
+  //    _haveActiveFilter = true;
+  //  } else {
+  //    _displayedQuestions = objectFilter(_questions,() => {return true});
+  //    _filtersState = {
+  //      onlyAnswered: false,
+  //      onlyUnanswered: false
+  //    };
+  //    _haveActiveFilter = false;
+  //  }
+  //}
+
+
+
+
+  if (filterState) {
+    _filtersState = {
+      onlyAnswered: filter === 'answered',
+      onlyUnanswered: filter === 'unanswered'
+    };
+    _displayedQuestions = objectFilter(_questions, (question) => {
+      return filter === 'answered' ? question.hasChosenAnswer : !question.hasChosenAnswer
+    });
+
+  } else {
+
+    let onlyAnsweredActive = _haveActiveFilter === 'answered';
+    let onlyUnansweredActive = _haveActiveFilter === 'unanswered';
+    _filtersState = {
+      onlyAnswered: onlyAnsweredActive ? !onlyAnsweredActive : onlyAnsweredActive,
+      onlyUnanswered: onlyUnansweredActive ? !onlyUnansweredActive : onlyUnansweredActive
+    };
+    _displayedQuestions = objectFilter(_questions,() => {return true});
   }
+
+  _haveActiveFilter = filterState ? filter : false;
   _displayedQuestions = sortItemsInCollection(_displayedQuestions, 'created', -1);
 }
 
